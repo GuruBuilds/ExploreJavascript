@@ -55,10 +55,39 @@ body {
     margin: 2rem;
 }
 
-.theme-switch {
+.developer-info {
     position: fixed;
     top: 20px;
     left: 20px;
+    z-index: 1000;
+}
+
+.developer-info a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--glass);
+    padding: 8px 15px;
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.developer-info a:hover {
+    transform: translateY(-2px);
+    background: var(--primary);
+    color: white;
+}
+
+.theme-switch {
+    position: fixed;
+    top: 20px;
+    right: 20px;
     z-index: 1000;
 }
 
@@ -89,7 +118,7 @@ body {
     justify-content: center;
     gap: 1rem;
     color: var(--text);
-    animation: titleFloat 3s ease-in-out infinite;
+    /* animation: titleFloat 3s ease-in-out infinite; */
 }
 
 .timer-wrapper {
