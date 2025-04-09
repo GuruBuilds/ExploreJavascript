@@ -26,6 +26,10 @@ class Stopwatch {
         this.resetBtn.addEventListener('click', () => this.reset());
         this.themeIcon.addEventListener('click', () => this.toggleTheme());
         this.clearLapsBtn.addEventListener('click', () => this.clearLaps());
+
+        // Load saved state
+        this.loadState();
+        window.addEventListener('beforeunload', () => this.saveState());
     }
 
     start() {
@@ -34,6 +38,7 @@ class Stopwatch {
         this.startTime = Date.now() - this.elapsedTime;
         this.update();
         this.updateButtons();
+        this.saveState();
     }
 
     togglePauseResume() {
@@ -43,6 +48,7 @@ class Stopwatch {
             this.update();
         }
         this.updateButtons();
+        this.saveState();
     }
 
     reset() {
@@ -55,6 +61,7 @@ class Stopwatch {
         this.updateDisplay();
         this.updateProgress(0);
         this.updateButtons();
+        this.saveState();
     }
 
     update() {
@@ -63,6 +70,7 @@ class Stopwatch {
         this.updateDisplay();
         this.updateProgress((this.elapsedTime % 60000) / 60000);
         this.animationFrameId = requestAnimationFrame(() => this.update());
+        this.saveState();
     }
 
     updateDisplay() {
@@ -97,20 +105,23 @@ class Stopwatch {
             <i class="fas fa-trash delete-lap"></i>
         `;
         
-        lapItem.querySelector('.delete-lap').addEventListener('click', (e) => {
+        lapItem.querySelector('.delete-lap').addEventListener('click', () => {
             lapItem.remove();
             this.updateLapCount();
+            this.saveState();
         });
 
         this.historyList.prepend(lapItem);
         this.lapCount++;
         this.updateLapCount();
+        this.saveState();
     }
 
     clearLaps() {
         this.historyList.innerHTML = '';
         this.lapCount = 1;
         this.updateLapCount();
+        this.saveState();
     }
 
     updateLapCount() {
@@ -132,6 +143,83 @@ class Stopwatch {
         document.body.classList.toggle('dark-theme');
         this.themeIcon.classList.toggle('fa-moon');
         this.themeIcon.classList.toggle('fa-sun');
+        this.saveState();
+    }
+
+    // Cookie handling methods
+    saveState() {
+        const state = {
+            isRunning: this.isRunning,
+            startTime: this.startTime,
+            elapsedTime: this.elapsedTime,
+            laps: Array.from(this.historyList.children).reverse().map(lap => {
+                const spans = lap.querySelectorAll('span');
+                return {
+                    number: spans[0].textContent,
+                    time: spans[1].textContent
+                };
+            }),
+            isDarkTheme: this.isDarkTheme
+        };
+        localStorage.setItem('stopwatchState', JSON.stringify(state));
+    }
+
+    loadState() {
+        try {
+            const saved = localStorage.getItem('stopwatchState');
+            if (!saved) return;
+
+            const state = JSON.parse(saved);
+
+            // Restore basic state
+            this.isRunning = state.isRunning;
+            this.startTime = state.startTime;
+            this.elapsedTime = state.elapsedTime;
+            this.isDarkTheme = state.isDarkTheme;
+
+            // Restore theme
+            if (this.isDarkTheme) {
+                document.body.classList.add('dark-theme');
+                this.themeIcon.classList.replace('fa-moon', 'fa-sun');
+            }
+
+            // Restore laps
+            this.historyList.innerHTML = '';
+            this.lapCount = 1;
+            state.laps.forEach(lapData => {
+                const lapItem = document.createElement('div');
+                lapItem.className = 'lap-item';
+                lapItem.innerHTML = `
+                    <span>${lapData.number}</span>
+                    <span>${lapData.time}</span>
+                    <i class="fas fa-trash delete-lap"></i>
+                `;
+                lapItem.querySelector('.delete-lap').addEventListener('click', () => {
+                    lapItem.remove();
+                    this.updateLapCount();
+                    this.saveState();
+                });
+                this.historyList.prepend(lapItem);
+                this.lapCount = parseInt(lapData.number.split(' ')[1]) + 1;
+            });
+
+            // Restore timer if running
+            if (this.isRunning) {
+                const currentTime = Date.now();
+                this.elapsedTime = currentTime - this.startTime;
+                this.startTime = currentTime - this.elapsedTime;
+                this.update();
+            }
+
+            this.updateDisplay();
+            this.updateProgress((this.elapsedTime % 60000) / 60000);
+            this.updateButtons();
+            this.updateLapCount();
+
+        } catch (e) {
+            console.error('Failed to load state:', e);
+            localStorage.removeItem('stopwatchState');
+        }
     }
 }
 
