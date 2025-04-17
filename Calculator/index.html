@@ -209,7 +209,7 @@
             </h1>
         </div>
 
-        <div class="display" id="display">0</div>
+        <div class="display text-truncate" id="display">0</div>
 
         <div class="buttons-grid">
             <button class="calc-btn function-btn">AC</button>
@@ -244,21 +244,21 @@
         const buttons = document.querySelectorAll('.calc-btn');
         const themeIcon = document.getElementById('themeIcon');
         let resetDisplay = false;
-
+    
         // Theme switching
         document.querySelector('.theme-switch').addEventListener('click', () => {
             document.body.classList.toggle('dark-theme');
             themeIcon.classList.toggle('fa-moon');
             themeIcon.classList.toggle('fa-sun');
         });
-
+    
         // Calculator logic
         buttons.forEach(button => {
             button.addEventListener('click', () => {
                 const value = button.textContent;
                 const currentDisplay = display.textContent;
                 const operators = ['×', '÷', '%', '+', '-'];
-
+    
                 if (value === 'AC') {
                     display.textContent = '0';
                     resetDisplay = false;
@@ -274,7 +274,12 @@
                     }
                 } else if (operators.includes(value)) {
                     const lastChar = currentDisplay.slice(-1);
-                    if (operators.includes(lastChar)) {
+                    
+                    // Special handling for negative numbers
+                    if (value === '-' && currentDisplay === '0') {
+                        display.textContent = '-';
+                    }
+                    else if (operators.includes(lastChar)) {
                         display.textContent = currentDisplay.slice(0, -1) + value;
                     } else {
                         display.textContent += value;
@@ -303,6 +308,12 @@
                             .replace(/×/g, '*')
                             .replace(/÷/g, '/')
                             .replace(/%/g, '*0.01');
+                        
+                        // Handle negative numbers at start of expression
+                        if (expression.startsWith('-')) {
+                            expression = '0' + expression;
+                        }
+                        
                         let result = math.evaluate(expression);
                         
                         if (Number.isFinite(result)) {
