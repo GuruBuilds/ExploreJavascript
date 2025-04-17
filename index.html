@@ -132,6 +132,34 @@
                 height: 60px;
             }
         }
+
+                /* Icon Color Schemes */
+                .color-purple {
+            --icon-primary: #6c5ce7;
+            --icon-secondary: #a66efa;
+        }
+        .color-blue {
+            --icon-primary: #45b7d1;
+            --icon-secondary: #4ecdc4;
+        }
+        .color-red {
+            --icon-primary: #fc466b;
+            --icon-secondary: #ff6b6b;
+        }
+        .color-green {
+            --icon-primary: #00b894;
+            --icon-secondary: #55efc4;
+        }
+        .color-yellow {
+            --icon-primary: #fdcb6e;
+            --icon-secondary: #ffeaa7;
+        }
+        .color-pink {
+            --icon-primary: #e84393;
+            --icon-secondary: #fd79a8;
+        }
+
+        .color-purple svg { color: #6c5ce7; }
     </style>
 </head>
 <body>
@@ -181,7 +209,8 @@
             { 
                 title: "Calculator", 
                 icon: `<svg><use href="#calculator"/></svg>`,
-                url: "calculator/index.html" 
+                url: "calculator/index.html",
+                color: "color-purple"
             },
             { 
                 title: "Stopwatch", 
@@ -228,7 +257,7 @@
         function generateProjectCards() {
             const container = document.getElementById('projectsContainer');
             container.innerHTML = projects.map(project => `
-                <a href="${project.url}" class="project-card">
+                <a href="${project.url}" class="project-card ${project.color}">
                     <div class="project-icon">${project.icon}</div>
                     <span class="project-name">${project.title}</span>
                 </a>
