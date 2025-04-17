@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a8a5e6;
+            --background: #f8f9fa;
+            --text: #2d3436;
+            --glass: rgba(255, 255, 255, 0.3);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --danger: #ff4757;
+        }
+
+        .dark-theme {
+            --primary: #7c6cf1;
+            --secondary: #4a47a3;
+            --background: #1a1a1a;
+            --text: #ffffff;
+            --glass: rgba(0, 0, 0, 0.3);
+            --shadow: 0 8px 32px rgba(255, 255, 255, 0.05);
+            --danger: #ff6b81;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.5s ease;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .theme-switch {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--text);
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                var(--primary) 0%,
+                var(--secondary) 25%,
+                var(--background) 50%,
+                var(--secondary) 75%,
+                var(--primary) 100%
+            );
+            background-size: 400% 400%;
+            animation: gradientFlow 15s ease infinite;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        /* @keyframes gradientFlow {
+            0% {
+                background-position: 0% 50%;
+                transform: rotate(0deg);
+            }
+            50% {
+                background-position: 100% 50%;
+                transform: rotate(180deg);
+            }
+            100% {
+                background-position: 0% 50%;
+                transform: rotate(360deg);
+            }
+        } */
+
+        .particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+            opacity: 0.1;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0) scale(0.5);
+                opacity: 0.1;
+            }
+            25% {
+                transform: translateY(-25vh) translateX(25vw) scale(1);
+                opacity: 0.15;
+            }
+            50% {
+                transform: translateY(-50vh) translateX(-25vw) scale(0.8);
+                opacity: 0.1;
+            }
+            75% {
+                transform: translateY(-75vh) translateX(25vw) scale(1.2);
+                opacity: 0.05;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(0) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        .glass-container {
+            background: var(--glass);
+            backdrop-filter: blur(16px) saturate(180%);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            width: 90%;
+            max-width: 400px;
+            margin: 2rem;
+        }
+
+        .display {
+            background: var(--glass);
+            backdrop-filter: blur(5px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: right;
+            font-size: 2.5rem;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.8rem;
+        }
+
+        .calc-btn {
+            padding: 1.2rem;
+            border: none;
+            border-radius: 12px;
+            background: var(--glass);
+            color: var(--text);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .calc-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+
+
+        .operator {
+            background: rgba(108, 92, 231, 0.3);
+        }
+
+        .equals {
+            background: var(--primary);
+            color: white;
+            grid-column: span 2;
+        }
+
+        .function-btn {
+            background: rgba(255, 71, 87, 0.3);
+        }
+
+        .function-btn:hover {
+            background: var(--danger);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-switch">
+        <i class="fas fa-moon" id="themeIcon"></i>
+    </div>
+    <div class="animated-bg"></div>
+    <div class="particles" id="particles"></div>
+    
+    <div class="glass-container">
+        <div class="header">
+            <h1 class="title">
+                <i class="fas fa-calculator"></i>
+                <span class="title-text">CALCULATOR</span>
+            </h1>
+        </div>
+
+        <div class="display" id="display">0</div>
+
+        <div class="buttons-grid">
+            <button class="calc-btn function-btn">AC</button>
+            <button class="calc-btn function-btn">DEL</button>
+            <button class="calc-btn operator">%</button>
+            <button class="calc-btn operator">÷</button>
+            
+            <button class="calc-btn">7</button>
+            <button class="calc-btn">8</button>
+            <button class="calc-btn">9</button>
+            <button class="calc-btn operator">×</button>
+            
+            <button class="calc-btn">4</button>
+            <button class="calc-btn">5</button>
+            <button class="calc-btn">6</button>
+            <button class="calc-btn operator">-</button>
+            
+            <button class="calc-btn">1</button>
+            <button class="calc-btn">2</button>
+            <button class="calc-btn">3</button>
+            <button class="calc-btn operator">+</button>
+            
+            <button class="calc-btn">0</button>
+            <button class="calc-btn">.</button>
+            <button class="calc-btn equals">=</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
+    <script>
+        const display = document.getElementById('display');
+        const buttons = document.querySelectorAll('.calc-btn');
+        const themeIcon = document.getElementById('themeIcon');
+        let resetDisplay = false;
+
+        // Theme switching
+        document.querySelector('.theme-switch').addEventListener('click', () => {
+            document.body.classList.toggle('dark-theme');
+            themeIcon.classList.toggle('fa-moon');
+            themeIcon.classList.toggle('fa-sun');
+        });
+
+        // Calculator logic
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                const value = button.textContent;
+                const currentDisplay = display.textContent;
+                const operators = ['×', '÷', '%', '+', '-'];
+
+                if (value === 'AC') {
+                    display.textContent = '0';
+                    resetDisplay = false;
+                } else if (value === 'DEL') {
+                    display.textContent = currentDisplay.slice(0, -1) || '0';
+                    resetDisplay = false;
+                } else if (/\d/.test(value)) {
+                    if (resetDisplay || currentDisplay === '0') {
+                        display.textContent = value;
+                        resetDisplay = false;
+                    } else {
+                        display.textContent += value;
+                    }
+                } else if (operators.includes(value)) {
+                    const lastChar = currentDisplay.slice(-1);
+                    if (operators.includes(lastChar)) {
+                        display.textContent = currentDisplay.slice(0, -1) + value;
+                    } else {
+                        display.textContent += value;
+                    }
+                    resetDisplay = false;
+                } else if (value === '.') {
+                    if (resetDisplay) {
+                        display.textContent = '0.';
+                        resetDisplay = false;
+                        return;
+                    }
+                    const lastChar = currentDisplay.slice(-1);
+                    if (operators.includes(lastChar)) {
+                        display.textContent += '0.';
+                    } else {
+                        const parts = currentDisplay.split(/[×÷%+-]/);
+                        const lastPart = parts[parts.length - 1];
+                        if (!lastPart.includes('.')) {
+                            display.textContent += '.';
+                        }
+                    }
+                } else if (value === '=') {
+                    if (resetDisplay) return;
+                    try {
+                        let expression = currentDisplay
+                            .replace(/×/g, '*')
+                            .replace(/÷/g, '/')
+                            .replace(/%/g, '*0.01');
+                        let result = math.evaluate(expression);
+                        
+                        if (Number.isFinite(result)) {
+                            result = Number(result.toPrecision(12));
+                            display.textContent = result.toString()
+                                .replace(/(\.[0-9]*[1-9])0+$/, '$1')
+                                .replace(/\.$/, '');
+                        } else {
+                            display.textContent = 'Error';
+                        }
+                        resetDisplay = true;
+                    } catch (e) {
+                        display.textContent = 'Error';
+                        resetDisplay = true;
+                    }
+                }
+            });
+        });
+
+        // Handle keyboard input
+        document.addEventListener('keydown', (e) => {
+            const key = e.key;
+            const button = Array.from(buttons).find(b => 
+                b.textContent === key ||
+                (key === 'Enter' && b.textContent === '=') ||
+                (key === '*' && b.textContent === '×') ||
+                (key === '/' && b.textContent === '÷') ||
+                (key === 'Backspace' && b.textContent === 'DEL') ||
+                (key === 'Escape' && b.textContent === 'AC')
+            );
+            if (button) button.click();
+        });
+
+        // Create particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                
+                const size = Math.random() * 100 + 50;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                
+                particle.style.animationDuration = Math.random() * 20 + 10 + 's';
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        createParticles();
+    </script>
+</body>
+</html>

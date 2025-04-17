@@ -1,0 +1,104 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+  <title>Vanilla JS User Management</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    input { margin: 5px; }
+    .hidden { display: none; }
+    #dashboard { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>User Management (No Backend)</h1> -->
+
+  <!-- Registration -->
+  <!-- <div id="registerSection">
+    <h2>Register</h2>
+    <input id="regUsername" placeholder="Username">
+    <input id="regPassword" placeholder="Password" type="password">
+    <button onclick="register()">Register</button>
+  </div> -->
+
+  <!-- Login -->
+  <!-- <div id="loginSection">
+    <h2>Login</h2>
+    <input id="loginUsername" placeholder="Username">
+    <input id="loginPassword" placeholder="Password" type="password">
+    <button onclick="login()">Login</button>
+  </div> -->
+
+  <!-- Dashboard -->
+  <!-- <div id="dashboard" class="hidden">
+    <h2>Welcome, <span id="loggedInUser"></span>!</h2>
+    <button onclick="logout()">Logout</button>
+  </div> -->
+
+  <!-- Status Message -->
+  <!-- <p id="status" style="color: red;"></p> -->
+
+  <script>
+    // Check session on load
+    // window.onload = function() {
+    //   const user = localStorage.getItem('loggedInUser');
+    //   if (user) {
+    //     showDashboard(user);
+    //   }
+    // };
+
+    // function register() {
+    //   const username = document.getElementById('regUsername').value.trim();
+    //   const password = document.getElementById('regPassword').value;
+
+    //   if (!username || !password) {
+    //     setStatus('Please enter username and password');
+    //     return;
+    //   }
+
+    //   if (localStorage.getItem('user_' + username)) {
+    //     setStatus('User already exists');
+    //     return;
+    //   }
+
+    //   localStorage.setItem('user_' + username, password);
+    //   setStatus('User registered successfully!', true);
+    // }
+
+    // function login() {
+    //   const username = document.getElementById('loginUsername').value.trim();
+    //   const password = document.getElementById('loginPassword').value;
+
+    //   const storedPassword = localStorage.getItem('user_' + username);
+
+    //   if (storedPassword === password) {
+    //     localStorage.setItem('loggedInUser', username);
+    //     showDashboard(username);
+    //     setStatus('');
+    //   } else {
+    //     setStatus('Invalid credentials');
+    //   }
+    // }
+
+    // function logout() {
+    //   localStorage.removeItem('loggedInUser');
+    //   document.getElementById('dashboard').classList.add('hidden');
+    //   document.getElementById('registerSection').classList.remove('hidden');
+    //   document.getElementById('loginSection').classList.remove('hidden');
+    //   setStatus('Logged out', true);
+    // }
+
+    // function showDashboard(username) {
+    //   document.getElementById('loggedInUser').innerText = username;
+    //   document.getElementById('dashboard').classList.remove('hidden');
+    //   document.getElementById('registerSection').classList.add('hidden');
+    //   document.getElementById('loginSection').classList.add('hidden');
+    // }
+
+    // function setStatus(msg, success = false) {
+    //   const status = document.getElementById('status');
+    //   status.innerText = msg;
+    //   status.style.color = success ? 'green' : 'red';
+    // }
+  </script>
+<!-- </body>
+</html> -->
