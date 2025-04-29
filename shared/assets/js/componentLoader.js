@@ -16,13 +16,29 @@ class ComponentLoader {
         return `<div class="error">Error loading ${componentName} component</div>`;
       }
     }
-  
-    static async loadHeader(icon = 'code', title = 'App') {
-      const headerHtml = await this.loadComponent('header', {
-        APP_ICON: icon,
-        APP_TITLE: title
-      });
-      document.body.insertAdjacentHTML('afterbegin', headerHtml);
+
+    static async loadHeader(icon = 'code', title = 'App', isHome = false) {
+      const headerHtml = await this.loadComponent('header');
+      document.body.insertAdjacentHTML('afterbegin', headerHtml);      
+      const titleContainer = document.getElementById('titleContainer');
+      if (isHome) {
+        titleContainer.innerHTML = `
+          <h1 class="title">
+            <i class="fas fa-${icon}"></i>
+            <span class="title-text">${title}</span>
+          </h1>
+        `;
+      } else {
+        titleContainer.innerHTML = `
+          <a href="/JavaScriptProjectHub/" class="title-link">
+            <h1 class="title">
+              <i class="fas fa-${icon}"></i>
+              <span class="title-text">${title}</span>
+              <span class="back-arrow">← Back</span>
+            </h1>
+          </a>
+        `;
+      }
     }
   
     static async loadFooter() {

@@ -1,72 +1,128 @@
-.calculator-container {
-    max-width: 400px;
-    margin: 2rem auto;
+/* Calculator Container */
+.glass-container {
+  max-width: 550px; /* Slightly wider container */
+  margin: 6rem auto 2rem;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(16px);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
+[data-theme="dark"] .glass-container {
+  background: rgba(30, 30, 30, 0.2);
+}
+
+/* Display */
 .display {
-    background: var(--glass);
-    backdrop-filter: blur(5px);
-    border-radius: 15px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    text-align: right;
-    font-size: 2.5rem;
-    font-family: 'Courier New', monospace;
-    overflow: hidden;
-    white-space: nowrap;
+  width: 100%;
+  height: 80px;
+  margin-bottom: 1.5rem;
+  padding: 0 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: var(--text);
+  text-align: right;
+  line-height: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Buttons Grid */
 .buttons-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.8rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
 }
 
 .calc-btn {
-    padding: 1.2rem;
-    border: none;
-    border-radius: 12px;
-    background: var(--glass);
-    color: var(--text);
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
-    transition: all 0.3s ease, background-color 0.3s ease;
+  height: 70px; /* Fixed height instead of aspect ratio */
+  border: none;
+  border-radius: 12px;
+  font-size: 1.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
-.calc-btn:hover {
-    background: var(--primary);
-    color: white;
-    transform: translateY(-2px);
+/* Button Types */
+.function-btn {
+  background: rgba(252, 70, 107, 0.2);
+  color: #fc466b;
 }
 
 .operator {
-    background: rgba(var(--primary-rgb), 0.3);
-    color: var(--primary);
+  background: rgba(108, 92, 231, 0.2);
+  color: var(--primary);
+}
+
+.equals {
+  background: rgba(0, 184, 148, 0.2);
+  color: #00b894;
+  grid-column: span 2; /* Now spans 2 columns */
+  width: 100%; /* Full width of the spanned columns */
+}
+
+/* Hover Effects */
+.calc-btn:hover {
+  transform: translateY(-2px);
+  background: #bbb2ff;
+}
+
+.function-btn:hover {
+  background: rgba(252, 70, 107, 0.3);
+}
+
+.operator:hover {
+  background: rgba(108, 92, 231, 0.3);
+}
+
+.equals:hover {
+  background: rgba(0, 184, 148, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .glass-container {
+      margin: 5rem 1rem 2rem;
+      padding: 1.5rem;
   }
   
-  .operator:hover {
-    background: var(--primary);
-    color: white;
+  .display {
+      height: 70px;
+      font-size: 2rem;
+      line-height: 70px;
   }
   
-  .equals {
-    background: var(--primary);
-    color: white;
-    grid-column: span 2;
+  .calc-btn {
+      height: 60px;
+      font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .display {
+      height: 60px;
+      font-size: 1.8rem;
+      line-height: 60px;
   }
   
-  .equals:hover {
-    background: var(--primary-light);
+  .buttons-grid {
+      gap: 0.8rem;
   }
   
-  .function-btn {
-    background: rgba(var(--danger-rgb), 0.3);
-    color: var(--danger);
+  .calc-btn {
+      height: 50px;
+      font-size: 1.1rem;
   }
-  
-  .function-btn:hover {
-    background: var(--danger);
-    color: white;
-  }
+}

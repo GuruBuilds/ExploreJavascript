@@ -10,13 +10,12 @@
     <link rel="stylesheet" href="assets/css/hub.css">
 </head>
 <body>
-    <!-- Header Component -->
-    <script src="shared/components/header.html" type="text/html" id="header-template"></script>
+    <script src="shared/assets/js/componentLoader.js"></script>
     <script>
-        const headerTemplate = document.getElementById('header-template').textContent
-            .replace('${APP_ICON}', 'code')
-            .replace('${APP_TITLE}', 'JS PROJECTS HUB');
-        document.body.insertAdjacentHTML('afterbegin', headerTemplate);
+        document.addEventListener('DOMContentLoaded', async () => {
+            await ComponentLoader.loadHeader('code', 'JS PROJECTS HUB', true);
+            await ComponentLoader.loadFooter();
+        });
     </script>
 
     <canvas class="particles-container" id="particles"></canvas>
@@ -26,10 +25,10 @@
     </main>
 
     <!-- Footer Component -->
-    <script src="shared/components/footer.html" type="text/html" id="footer-template"></script>
+    <!-- <script src="shared/components/footer.html" type="text/html" id="footer-template"></script>
     <script>
         document.body.insertAdjacentHTML('beforeend', document.getElementById('footer-template').textContent);
-    </script>
+    </script> -->
 
     <!-- SVG Icons Sprite -->
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">

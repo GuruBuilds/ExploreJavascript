@@ -10,13 +10,12 @@
     <link rel="stylesheet" href="assets/css/calculator.css">
 </head>
 <body>
-    <!-- Header Component -->
-    <script src="../shared/components/header.html" type="text/html" id="header-template"></script>
+    <script src="../shared/assets/js/componentLoader.js"></script>
     <script>
-        const headerTemplate = document.getElementById('header-template').textContent
-            .replace('${APP_ICON}', 'calculator')
-            .replace('${APP_TITLE}', 'CALCULATOR');
-        document.body.insertAdjacentHTML('afterbegin', headerTemplate);
+        document.addEventListener('DOMContentLoaded', async () => {
+            await ComponentLoader.loadHeader('code', 'JS PROJECTS HUB');
+            await ComponentLoader.loadFooter();
+        });
     </script>
 
     <div class="animated-bg"></div>
@@ -51,12 +50,6 @@
             <button class="calc-btn equals">=</button>
         </div>
     </div>
-
-    <!-- Footer Component -->
-    <script src="../shared/components/footer.html" type="text/html" id="footer-template"></script>
-    <script>
-        document.body.insertAdjacentHTML('beforeend', document.getElementById('footer-template').textContent);
-    </script>
 
     <!-- Shared JavaScript -->
     <script src="../shared/assets/js/theme.js"></script>
